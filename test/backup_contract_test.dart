@@ -15,7 +15,7 @@ void main() {
     sqflite.databaseFactory = databaseFactoryFfiNoIsolate;
   });
 
-  // L-14/M-10：每个用例全新内存库，切断跨用例数据行依赖链。
+  // 每个用例全新内存库，切断跨用例数据行依赖链。
   setUp(() async {
     DatabaseHelper.databasePathOverrideForTest = sqflite.inMemoryDatabasePath;
     await DatabaseHelper.instance.resetForTest();
@@ -117,7 +117,7 @@ void main() {
     expect(await rowsOf('record'), before);
   });
 
-  // L-15：backupAt 缺键 / 非数值必须在写库前被拒。
+  // backupAt 缺键 / 非数值必须在写库前被拒。
   test('backupAt missing or non-numeric throws and leaves the db untouched',
       () async {
     await seedRows();
@@ -201,7 +201,7 @@ void main() {
     }
   });
 
-  // L-15：user 表空数组必须被拒（导入后系统将无设置行可读）。
+  // user 表空数组必须被拒（导入后系统将无设置行可读）。
   test('"user":[] throws and leaves the db untouched', () async {
     await seedRows();
     final beforeUser = await rowsOf('user');
@@ -211,7 +211,7 @@ void main() {
     expect(await rowsOf('user'), beforeUser);
   });
 
-  // L-15：calculate_day 越界（0 / 29）拒绝，边界内（1 / 28）接受。
+  // calculate_day 越界（0 / 29）拒绝，边界内（1 / 28）接受。
   test('calculate_day 0 and 29 are rejected, 1 and 28 are accepted', () async {
     for (final day in [0, 29]) {
       final payload = await exportPayload();
@@ -234,7 +234,7 @@ void main() {
     }
   });
 
-  // L-15：任意 user 行 id 强制重编号为 1（表契约恒单行 id=1）。
+  // 任意 user 行 id 强制重编号为 1（表契约恒单行 id=1）。
   test('user row with foreign id is restored renumbered to 1', () async {
     final payload = await exportPayload();
     payload['user'] = [
@@ -247,7 +247,7 @@ void main() {
     expect(user['calculate_day'], 5);
   });
 
-  // L-15：值类型畸形（列值为 Map）不是解析期 FormatException，
+  // 值类型畸形（列值为 Map）不是解析期 FormatException，
   // 必须以可识别错误原样上抛且整事务回滚，锁定 DB 层语义
   // （屏层 catch→提示的分支归 settings_screen，不在本用例范围）。
   test('a row with an unbindable value type surfaces an identifiable error '

@@ -132,7 +132,7 @@ class AppSettingsController extends ChangeNotifier {
   double _defaultHourlyRate = 20;
   List<double> _hourlyRates = List<double>.from(_fallbackHourlyRates);
   /// 与默认时薪表等长的全可见初始化：消 load() 前屏层读 [visibleHourlyRates]
-  /// 时的越界（F-8e），load() 后由 [_setHourlyRates] 整体替换。
+  /// 时的越界，load() 后由 [_setHourlyRates] 整体替换。
   List<bool> _hourlyRateVisibility = List<bool>.filled(
     _fallbackHourlyRates.length,
     true,
@@ -151,7 +151,7 @@ class AppSettingsController extends ChangeNotifier {
 
   ThemeMode get themeMode => _themeMode;
   double get defaultHourlyRate => _defaultHourlyRate;
-  /// 稳定实例（同 [workloadQuickOptions] 模式，F-8e/A1 先例）：时薪与可见性
+  /// 稳定实例（同 [workloadQuickOptions] 模式）：时薪与可见性
   /// 写点一律经 [_setHourlyRates] 失效缓存，Selector 切片相等才真实生效。
   List<double> get hourlyRates =>
       _hourlyRatesView ??= List.unmodifiable(_hourlyRates);
@@ -642,7 +642,7 @@ class AppSettingsController extends ChangeNotifier {
     return raw.map((value) => value == '1').toList(growable: false);
   }
 
-  /// 旧→新可见性映射只读快照参数（F-1 根修）：调用方必须在替换
+  /// 旧→新可见性映射只读快照参数：调用方必须在替换
   /// [_hourlyRates]/[_hourlyRateVisibility] 字段**前**捕获 prevRates/prevVis
   /// 传入；旧实现读已被替换的字段按下标与旧可见性配对，加/删时薪后错位
   /// （rates[10,20,30]+vis[T,F,F] 加 25 → 30 泄露、25 误隐）。
@@ -679,7 +679,7 @@ class AppSettingsController extends ChangeNotifier {
   double? _validRate(double? rate) {
     // 正向判断：NaN 对 <=0 与 >10000 均为 false，必须走 !(rate > 0 && ...) 才能排除。
     if (rate == null || !(rate > 0 && rate <= 10000)) return null;
-    // 舍入归一与 Money 分聚合口径合一（F-2）：26.555 → 2656 分 → 26.56；
+    // 舍入归一与 Money 分聚合口径合一：26.555 → 2656 分 → 26.56；
     // 旧 toStringAsFixed(2) 往返得 26.55（2655 分），与分单位口径分叉。
     return Money.centsToYuan(Money.yuanToCents(rate));
   }

@@ -111,7 +111,7 @@ class _WorkloadQuickOptionsScreenState
               child: Selector<AppSettingsController, List<WorkloadQuickOption>>(
                 selector: (context, controller) =>
                     controller.workloadQuickOptions,
-                // L-18：仅订阅工时选项切片；getter 为缓存 unmodifiable 视图
+                // 仅订阅工时选项切片；getter 为缓存 unmodifiable 视图
                 // （唯一写点失效），选项未变的 notify 不触发本列表重建。
                 builder: (context, options, _) => ListView(
                   padding: const EdgeInsets.fromLTRB(14, 18, 14, 28),
@@ -309,7 +309,7 @@ class _WorkloadOptionDialogState extends State<_WorkloadOptionDialog> {
     _hoursController = TextEditingController(text: _hoursEcho(widget.current));
   }
 
-  // L-34：回显沿用选项 label 的两位小数展示口径，避免 double→String 长尾。
+  // 回显沿用选项 label 的两位小数展示口径，避免 double→String 长尾。
   // 数值归一直接复用 workloadLabelForMinutes 单一源，仅去掉单位后缀。
   static String _hoursEcho(WorkloadQuickOption? current) {
     if (current == null) return '';

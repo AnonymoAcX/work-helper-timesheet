@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:work_helper/controllers/app_settings_controller.dart';
 import 'package:work_helper/theme/app_colors.dart';
 
-// P-9 兑现：前 8 色直接引 controller 单一源 defaultWorkColors
+// 前 8 色直接引 controller 单一源 defaultWorkColors
 // （重置与脏数据回落共用同一表），本屏不再维护副本；后 4 色为屏层扩展色板。
 final List<Color> _colorPresets = [
   for (final argb in AppSettingsController.defaultWorkColors) Color(argb),
@@ -40,7 +40,7 @@ class _WorkColorSettingsScreenState extends State<WorkColorSettingsScreen> {
   bool _pending = false;
 
   Future<void> _reset() async {
-    // L-29：重置是批量覆盖全部工时类型颜色，先二次确认再执行。
+    // 重置是批量覆盖全部工时类型颜色，先二次确认再执行。
     final confirmed =
         await showDialog<bool>(
           context: context,

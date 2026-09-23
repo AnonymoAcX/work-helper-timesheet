@@ -592,7 +592,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 }
 
-/// 日历分量制天偏移（L-24）：`Duration(days: n)` 按 24h 定步长，DST 跳零时
+/// 日历分量制天偏移：`Duration(days: n)` 按 24h 定步长，DST 跳零时
 /// 会偏一天；`DateTime` 分量构造跨月自动归一且不受夏令时影响。
 DateTime _shiftDays(DateTime base, int days) =>
     DateTime(base.year, base.month, base.day + days);

@@ -22,7 +22,7 @@ void main() {
     sqflite.databaseFactory = databaseFactoryFfiNoIsolate;
   });
 
-  // M-10/L-14 根修：单例连接若跨用例共享，前一用例结束时在途的查询会
+  // 单例连接若跨用例共享，前一用例结束时在途的查询会
   // 永久挂住该连接的内部锁，后续用例的 DB await 全部死锁，表现为
   // ScheduleScreen 加载转圈 → pumpAndSettle 超时级联失败。
   // 每用例 resetForTest 重建全新内存库，从源头切断共享。
@@ -102,7 +102,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byIcon(Icons.edit_outlined), findsNothing);
-    // L-11：设置屏不展示昵称，断言真实存储的昵称值不出现在界面上，
+    // 设置屏不展示昵称，断言真实存储的昵称值不出现在界面上，
     // 锁定「不暴露昵称控件」的行为本身。
     expect(find.textContaining('初始昵称'), findsNothing);
     expect(find.text('修改昵称'), findsNothing);
@@ -167,7 +167,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.ensureVisible(find.widgetWithText(ElevatedButton, '保存'));
     await tester.tap(find.widgetWithText(ElevatedButton, '保存'));
-    // L-13：保存链路无延时逻辑（无 Timer/Future.delayed），去掉掩盖性的
+    // 保存链路无延时逻辑（无 Timer/Future.delayed），去掉掩盖性的
     // pump(2s)，只留确定性 pumpAndSettle，避免残留计时器语义。
     await tester.pumpAndSettle();
 
@@ -210,7 +210,7 @@ void main() {
     final settings = AppSettingsController();
     await settings.load();
 
-    // L-12：注入固定时钟（12 月），跨年切换全部确定，不再依赖真实时钟。
+    // 注入固定时钟（12 月），跨年切换全部确定，不再依赖真实时钟。
     final clock = DateTime(2031, 12, 15, 10, 0);
     await tester.pumpWidget(
       ChangeNotifierProvider.value(
@@ -376,7 +376,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // L-12：'2' 来自注入的 initialDate（2031年2月），与真实时钟无关；
+    // '2' 来自注入的 initialDate（2031年2月），与真实时钟无关；
     // 「今」按定义取真实今天，仅容忍跨午夜瞬间的前后月差，其余确定。
     expect(
       tester.widget<Text>(find.byKey(const Key('scheduleMonthTitle'))).data,
@@ -415,7 +415,7 @@ void main() {
     expectNoFlutterException(tester, '待办空内容校验');
   });
 
-  // L-11：用例原名与 SettingsScreen 段承载「昵称刷新」语义，但设置屏已彻底
+  // 用例原名与 SettingsScreen 段承载「昵称刷新」语义，但设置屏已彻底
   // 移除昵称展示（findsNothing 恒真）；按已批准行为改名为真实被测行为。
   testWidgets('restore refreshes schedule todos', (WidgetTester tester) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -510,7 +510,7 @@ void main() {
   });
 
   test('workloadQuickOptions getter is a stable instance until data changes', () async {
-    // P-9 兑现：Selector 切片相等依赖同一引用——同一数据版本两次读取必须
+    // Selector 切片相等依赖同一引用——同一数据版本两次读取必须
     // identical；数据实际变化后才换新实例，否则变更无法被订阅方感知。
     SharedPreferences.setMockInitialValues({});
     final settings = AppSettingsController();

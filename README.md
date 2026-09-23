@@ -20,7 +20,7 @@
 - 本地存储：sqflite（^2.4.1）SQLite 数据库 + shared_preferences（^2.5.2）+ path_provider（^2.1.5）
 - 日历与农历：lunar（^1.7.8）
 - 本地通知：flutter_local_notifications（^18.0.1）、timezone（^0.10.1）
-- 其它：share_plus（^10.1.4）、uuid（^4.5.1）、intl（^0.20.2）、path（^1.9.1）
+- 其它：share_plus（^10.1.4）、uuid（^4.5.1）、intl（^0.20.2）、path（^1.9.1）、file_picker（^8.0.0）
 - 依赖来源：全部依赖按版本范围取自 pub.dev 或 Flutter SDK（flutter、flutter_localizations 等），无本地 path 依赖
 
 ## 项目结构
@@ -61,7 +61,7 @@ lib/
 
 ## 运行方式
 
-本项目为标准 Flutter 工程。运行前需自备 Flutter SDK：本机已安装的 Flutter 满足 `pubspec.yaml` 约束（Dart ^3.9.2、Flutter >=3.27.0）即可，仓库不内置 SDK。
+本项目为标准 Flutter 工程。运行前需自备 Flutter SDK：所装 Flutter 满足 `pubspec.yaml` 约束（Dart ^3.9.2、Flutter >=3.27.0）即可，仓库不内置 SDK。
 
 ```bash
 # 安装依赖
@@ -102,7 +102,7 @@ Flutter Web 浏览器运行预览处于规划阶段，尚未实施，工程当�
 
 ## 发布与分发
 
-本项目开源，安装包通过 GitHub Releases 等渠道分发。Android 要求每个应用都携带签名，签名身份决定旧版本能否直接升级：同一构建机产出的安装包签名一致，接收方可直接覆盖安装，本机数据不丢。命令均在 Windows PowerShell 中、于项目根目录执行。
+本项目开源，采用 MIT 许可证，详见 `LICENSE`；安装包通过 GitHub Releases 等渠道分发。Android 要求每个应用都携带签名，签名身份决定旧版本能否直接升级：同一构建机产出的安装包签名一致，接收方可直接覆盖安装，本机数据不丢。命令均在 Windows PowerShell 中、于项目根目录执行。
 
 ### 构建正式安装包
 

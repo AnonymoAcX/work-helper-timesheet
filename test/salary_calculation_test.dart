@@ -247,7 +247,7 @@ void main() {
       expect(await helper.calculateMonthlySalary(2026, 3), 0.0);
     });
 
-    // CR-2 R-2：脏库越界 calculate_day 读侧收口 1-28，与写侧/备份校验同锁；
+    // 脏库越界 calculate_day 读侧收口 1-28，与写侧/备份校验同锁；
     // 结算窗口与 getCalculateDay 同源（写 35 → 读 28）。
     test('calculate_day 越界读侧钳制 1-28 且窗口同源', () async {
       final db = await helper.database;

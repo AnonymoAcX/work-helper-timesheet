@@ -4,11 +4,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:work_helper/controllers/app_settings_controller.dart';
 import 'package:work_helper/utils/money.dart';
 
-/// CR-1 复审返工回归：可见性对齐（F-1）、舍入口径（F-2）、
-/// 未 load 越界（F-8e）与稳定缓存视图（F-8a/A1），经 controller 公开面构造。
+/// 可见性对齐、舍入口径、
+/// 未 load 越界与稳定缓存视图，经 controller 公开面构造。
 void main() {
   test('load 前可见时薪可安全读取（不越界）', () {
-    // F-8e 钉桩：旧实现 visibility=[] 时逐下标读会 RangeError。
+    // 钉桩：旧实现 visibility=[] 时逐下标读会 RangeError。
     final settings = AppSettingsController();
     expect(settings.visibleHourlyRates, hasLength(15));
     expect(settings.visibleHourlyRates, settings.hourlyRates);

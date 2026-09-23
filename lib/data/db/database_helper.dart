@@ -156,7 +156,7 @@ class DatabaseHelper {
   Future<double> calculateMonthlySalary(int year, int month) async {
     final db = await instance.database;
     // 统一经 getCalculateDay 读取：clamp 收口单一源，杜绝脏库数据造成
-    // 结算窗口与展示/查询分叉（R-2）。
+    // 结算窗口与展示/查询分叉。
     final calculateDay = await getCalculateDay();
     final start = DateTime(year, month, calculateDay);
     final end = DateTime(year, month + 1, calculateDay);
@@ -340,7 +340,7 @@ class DatabaseHelper {
       if (row is! Map) {
         throw FormatException('备份文件中的${_backupTableLabels[table]}数据无法识别');
       }
-      // F-8b 纵深：record 行 date 显式为 null 时在日期窗口查询下永不可见，
+      // 纵深防护：record 行 date 显式为 null 时在日期窗口查询下永不可见，
       // 写回只会形成数据黑洞；跳过该行、不计入恢复行数统计。
       // 缺 date 键的行仍走列 DEFAULT 0，行为不变。
       if (table == 'record' && row.containsKey('date') && row['date'] == null) {

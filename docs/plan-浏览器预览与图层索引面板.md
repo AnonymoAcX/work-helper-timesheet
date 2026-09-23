@@ -1,6 +1,6 @@
 # 浏览器预览与图层索引面板实施规格
 
-本文是浏览器预览与图层索引面板的实施规格，所有技术决策均已锁定，实施时按本文执行，不增删决策。项目为 Flutter 应用（现有目标平台为 Android 与 iOS，功能覆盖工时记录、待办、工资计算与提醒设置）。
+本文是浏览器预览与图层索引面板的实施规格，所有技术决策均已锁定，实施时按本文执行，不增删决策。项目为 Flutter 应用（现有目标平台为 Android，iOS 平台目录已从开源仓排除；功能覆盖工时记录、待办、工资计算与提醒设置）。
 
 ## 目标与边界
 
@@ -13,16 +13,16 @@
 边界（硬约束）：
 
 - 不做生产 web 版，仅服务设计预览。
-- Android/iOS 行为零变化。
+- Android 行为零变化。
 - 不升级任何依赖的大版本。
 
 ## 现状事实
 
-- SDK：使用本机已安装的 Flutter，版本为 Flutter 3.47.1 stable（Dart 3.13.1，2026-08-19）。
+- SDK：使用开发机上安装的 Flutter，版本为 Flutter 3.47.1 stable（Dart 3.13.1，2026-08-19）。
 - 该 SDK 的 web 平台支持默认全开，无需执行 `flutter config`。
-- 本机已存在 `flutter_web_sdk/canvaskit`，离线运行风险低。
+- 开发机已缓存 `flutter_web_sdk/canvaskit`，离线运行风险低。
 - 工程当前没有 `web/` 目录；`.metadata` 的 `migration.platforms` 仅含 root、android、ios。
-- 补平台命令只新建 `web/` 目录与 `.metadata` 条目，不改动 `lib/`、`android/`、`ios/`：
+- 补平台命令只新建 `web/` 目录与 `.metadata` 条目，不改动 `lib/` 与 `android/`：
 
 ```bash
 flutter create . --platforms web
@@ -154,7 +154,7 @@ chrome 打开 `flutter run` 终端打印的 DevTools URL，在审查模式点选
 
 ## 风险与未知项
 
-- 本机 Chrome 是否存在未确认；实施前先执行 `Get-Command chrome` 检查，缺失则安装或改用 Edge。
+- 开发机是否已安装 Chrome 未确认；实施前先执行 `Get-Command chrome` 检查，缺失则安装或改用 Edge。
 - web 会话中 DevTools「创建位置」列的实际渲染未实跑验证，当前依据为机制分析与官方文档支持。
 - `flutter build web` 是否接受 `--debug`/`--profile` 参数未确认；默认 release 已满足需求。
 - 依赖隔离完成后的真实 dart2js 全量编译通过性，需建 `web/` 后首跑验证。
