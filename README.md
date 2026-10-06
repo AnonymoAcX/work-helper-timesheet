@@ -1,125 +1,78 @@
-# 记工时（work_helper）
+# 记工时
 
-「记工时」是一款基于 Flutter 开发的单机个人工时记录应用，面向按工时、班次计薪的劳动者，提供工时登记、待办清单、薪资统计与提醒等服务。数据保存在本机，不需要登录，不提供云同步，也不会读取系统日历。
+一款给按小时、按班次拿工资的人用的记工时 Android 应用。上班记一笔，月底打开统计页就能看到这个月干了多少小时、应该拿多少钱，对工资条的时候不用再翻聊天记录、回忆哪天加没加班。
 
-## 功能概览
+所有数据只存在手机本地，不需要注册登录，也没有任何联网功能。
 
-- **工时记录**：登记每日上班时间、加班时长与预定时薪，支持农历日期显示，随时回溯历史记录。
-- **待办清单**：按日期添加待办事项，支持备注、完成标记与删除，随手记下当天要做的事。
-- **薪资统计**：按时薪与工时自动汇总应得收入，提供统计视图，辅助核对工资。
-- **提醒通知**：支持本地提醒设置，每天定时提醒补记当天工时与待办。
-- **本地日历**：按日期查看本地工时记录与农历日期，支持翻月和历史回溯；应用只使用自己的日期视图。
-- **个性化设置**：主题明暗切换、时薪标准、考勤周期、工时颜色和提醒开关可自定义。
-- **工作量快捷项**：自定义记工时页面的快捷时长，可添加、编辑、排序、隐藏和删除；只影响快捷按钮，不会修改已有记录。
-- **备份与恢复**：备份工时记录、待办、昵称、考勤周期、时薪、颜色、主题、提醒和工作量快捷项；恢复支持旧版备份格式，校验通过后整体替换本地数据。
+## 长什么样
 
-## 技术栈
+打开应用就是日历，哪天干了活一目了然：
 
-- 框架：Flutter（Dart SDK ^3.9.2、Flutter >=3.27.0），当前目标平台为 Android
-- 状态管理：provider（^6.1.2）
-- 本地存储：sqflite（^2.4.1）SQLite 数据库 + shared_preferences（^2.5.2）+ path_provider（^2.1.5）
-- 日历与农历：lunar（^1.7.8）
-- 本地通知：flutter_local_notifications（^18.0.1）、timezone（^0.10.1）
-- 其它：share_plus（^10.1.4）、uuid（^4.5.1）、intl（^0.20.2）、path（^1.9.1）、file_picker（^8.0.0）
-- 依赖来源：全部依赖按版本范围取自 pub.dev 或 Flutter SDK（flutter、flutter_localizations 等），无本地 path 依赖
+![记录页](screenshots/record-home.png)
 
-## 项目结构
+点右下角「记工时」，选班次、填小时数，两秒记完一笔：
 
-```text
-lib/
-├── main.dart                              # 应用入口、主题与底部导航（工时/待办/统计/个人）
-├── controllers/
-│   ├── app_settings_controller.dart       # 全局应用设置状态管理
-│   └── data_store.dart                    # 业务数据变更版本号，驱动页面数据重载
-├── data/
-│   └── db/
-│       └── database_helper.dart           # SQLite 建库建表（本机设置、工时记录、待办）与数据访问
-├── models/
-│   ├── record.dart                        # 工时记录模型（含预定时薪）
-├── screens/
-│   ├── record_screen.dart                 # 工时首页
-│   ├── schedule_screen.dart               # 待办清单页（按日期管理待办）
-│   ├── salary_screen.dart                 # 薪资统计
-│   ├── settings_screen.dart               # 个人中心与设置入口
-│   ├── attendance_cycle_screen.dart       # 考勤周期设置
-│   ├── hourly_rate_settings_screen.dart   # 时薪设置
-│   ├── work_color_settings_screen.dart    # 班次颜色设置
-│   ├── workload_quick_options_screen.dart # 工作量快捷项设置
-│   ├── theme_settings_screen.dart         # 主题设置
-│   └── reminder_settings_screen.dart      # 提醒设置
-├── services/
-│   └── reminder_notification_service.dart # 本地通知提醒
-├── theme/
-│   └── app_colors.dart                    # 全局颜色常量统一源
-├── utils/
-│   ├── lunar_formatter.dart               # 农历日期格式化
-│   ├── money.dart                         # 金额与工时精确换算（分/分钟整数口径）
-│   └── num_utils.dart                     # 数值安全解析
-└── widgets/
-    └── app_header.dart                    # 共享页面顶栏组件
-```
+![记一笔工时](screenshots/add-record.png)
 
-## 运行方式
+统计页按考勤周期自动汇总这个周期的收入和总工时，还能看每天的趋势：
 
-本项目为标准 Flutter 工程。运行前需自备 Flutter SDK：所装 Flutter 满足 `pubspec.yaml` 约束（Dart ^3.9.2、Flutter >=3.27.0）即可，仓库不内置 SDK。
+![薪资统计](screenshots/salary-stats.png)
+
+待办跟着日期走，交接班要注意什么、哪天要去办事，记在当天就不会忘：
+
+![待办](screenshots/todo.png)
+
+时薪、班次颜色、主题、提醒都可以按自己的习惯调整：
+
+![设置](screenshots/settings.png)
+
+## 能干什么
+
+**早上到工位点一下，记一笔。** 打开应用就是当天的日历，点「记工时」选个班次（白班、夜班、加班这些），工时可以手填也可以点快捷按钮，保存就完事。哪天忘了记，点日历上任何一天都能补录。
+
+**月底看这个月挣了多少。** 统计页把整个考勤周期的工时和收入汇总好，应得多少钱直接写在最上面，还有每天的收入趋势图。发工资那天打开对一眼，少了一眼就能看出差在哪几天。
+
+**忘了哪天加没加班，翻日历。** 日历上每天标着班次颜色和小计时数，农历也一并显示，翻到哪天看到哪天，不用再去翻微信记录或者问工友。
+
+**顺手记事。** 每天一个待办清单，记一句「问一下加班怎么算」「月底前导出考勤表」，做完打个勾。
+
+**换手机数据不丢。** 设置里一键备份全部数据到文件，新手机上恢复即可；也支持每天固定时间提醒你补记当天工时。
+
+## 下载安装
+
+到 [Releases](https://github.com/AnonymoAcX/work-helper-timesheet/releases/latest) 下载最新的 APK 安装包，传到手机上直接安装即可（需要 Android 7.0 及以上；首次安装时系统会提示允许安装来自此来源的应用，按提示授权即可）。数据全部保存在手机本地，卸载应用即删除，请按需使用应用内的「备份数据」功能导出备份。
+
+## 从源码构建
+
+需要先安装 Flutter SDK（要求见 `pubspec.yaml`），然后在项目根目录执行：
 
 ```bash
-# 安装依赖
+# 拉取依赖
 flutter pub get
 
 # 连接设备或启动模拟器后运行
 flutter run
 
-# 构建发布包（以 Android 为例）
+# 构建发布包
 flutter build apk --release
 ```
 
-运行单元测试：
+运行测试：
 
 ```bash
 flutter test
 ```
 
-## 界面预览方式
+## 界面截图如何生成
 
-改界面之前，可通过以下方式先看到效果，适用于不同场景。
+仓库里的截图由 `test/screenshot_test.dart` 在测试环境渲染真实页面生成（内存数据库注入演示数据，1080×2340）。需要更新截图时，在装有所需字体的开发机上运行：
 
-### HTML 设计稿预览
-
-用网页形式呈现界面设计稿，在电脑上即可查看，零成本，也不需要手机。
-
-- **适合场景**：大幅改版前先确认整体方向，比如页面怎么布局、几种风格选哪种。
-- **使用方式**：设计稿页面直接在浏览器中打开；候选方案可点选，点中哪个就针对哪个给出反馈。
-- **局限**：设计稿是静态示意图，不是应用里的真实控件，看不到实际的点击、滑动等交互效果。
-
-### 浏览器运行预览
-
-Flutter Web 浏览器运行预览处于规划阶段，尚未实施，工程当前仅含 Android 平台目录；实施规格见 `docs/plan-浏览器预览与图层索引面板.md`。在此之前，界面效果以 HTML 设计稿预览和真机测试为准。
-
-### 真机测试
-
-界面最终效果仍以手机真机为准：安装 release APK（正式打包的安装包）到手机上实际使用。
-
-## 发布与分发
-
-本项目开源，采用 MIT 许可证，详见 `LICENSE`；安装包通过 GitHub Releases 等渠道分发。Android 要求每个应用都携带签名，签名身份决定旧版本能否直接升级：同一构建机产出的安装包签名一致，接收方可直接覆盖安装，本机数据不丢。命令均在 Windows PowerShell 中、于项目根目录执行。
-
-### 构建正式安装包
-
-```powershell
-flutter build apk --release
+```bash
+flutter test --update-goldens test/screenshot_test.dart
 ```
 
-构建成功后，安装包位于 `build\app\outputs\flutter-apk\app-release.apk`。如要生成上传应用商店用的 App Bundle，执行 `flutter build appbundle --release`，`.aab` 产物的完整路径以构建结束时终端打印的提示为准。
+然后把 `build/screenshot-raw/` 下生成的 PNG 复制到 `screenshots/` 覆盖同名文件。该测试在其他环境会自动跳过，不影响普通 `flutter test`。
 
-### 签名说明
+## 许可证
 
-本工程的 release 构建类型直接采用调试签名（见 `android\app\build.gradle.kts` 中 release 的 `signingConfig`），对开源个人分发足够。Android 调试签名由构建机自身固定维护，同一台机器每次构建产出的签名相同：老用户拿到新版本安装包直接覆盖安装即可升级到新版本，应用内的工时数据、待办和设置全部保留。官方发布固定在发布机上构建，即可保证所有已分发版本的签名一致。
-
-### 发给他人安装
-
-把 `app-release.apk` 上传到 GitHub Releases，或通过聊天文件等方式直接发给对方。接收方在手机上点开文件即可安装；首次从这类渠道安装时，系统会提示禁止安装未知来源应用，按弹窗指引授予该来源的安装权限后继续。接收方手机系统需为 Android 7.0 及以上（工程配置的最低支持版本为 API 24）。
-
-### 升级提醒
-
-若接收方安装过与本包签名不同的历史版本（例如早期在别的机器上构建的包），覆盖安装会被系统拒绝，需先卸载旧版再装新版。卸载会清空应用内数据，操作前先在应用内用「备份数据」导出备份，装好新版后用「恢复数据 → 从文件管理器选择…」导入该备份即可。
+MIT，详见 `LICENSE`。
